@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.hae.yl.mapper.Service_itemMapper">
+
+    <resultMap id="Service_itemResultMap" type="org.hae.yl.entity.Service_item">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <result column="description" property="description"></result>
+        <result column="price" property="price"></result>
+        <result column="home_id" property="home_id"></result>
+    </resultMap>
+
+    <insert id="Insert">
+        INSERT INTO Service_item(
+            name ,
+            description ,
+            price ,
+            home_id
+        ) values (
+            #{Service_item.name},
+            #{Service_item.description},
+            #{Service_item.price},
+            #{Service_item.home_id}
+        )
+    </insert>
+
+    <update id="UpdateById">
+        update table Service_item
+        SET name = #{Service_item.name},
+            address = #{Service_item.description},
+            phone = #{Service_item.price},
+            description = #{Service_item.home_id}
+        where id = #{id}
+    </update>
+
+    <delete id="DeleteById">
+        DELETE from Service_item where id = #{id}
+    </delete>
+
+    <delete id="DeleteBybatch">
+        DELETE FROM Service_item
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="SelectAll" resultType="org.hae.yl.entity.Service_item">
+        select * from Service_item
+    </select>
+
+    <select id="SelectById" resultType="org.hae.yl.entity.Service_item">
+        select * from Service_item where id = #{id}
+    </select>
+
+    <select id="SelectByLike" resultType="org.hae.yl.entity.Service_item">
+        SELECT * FROM Service_item
+        WHERE name LIKE CONCAT('%', #{like}, '%')
+    </select>
+</mapper>

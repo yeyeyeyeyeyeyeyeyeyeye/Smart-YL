@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.hae.yl.mapper.AnnouncementMapper">
+
+    <resultMap id="AnnouncementResultMap" type="org.hae.yl.entity.Announcement">
+        <result column="id" property="id"></result>
+        <result column="title" property="title"></result>
+        <result column="content" property="content"></result>
+        <result column="type" property="type"></result>
+        <result column="target_role" property="target_role"></result>
+        <result column="created_at" property="created_at"></result>
+    </resultMap>
+
+    <insert id="Insert">
+        INSERT INTO Announcement(
+            title,
+            content,
+            type,
+            target_role,
+            created_at,
+        ) values (
+            #{Announcement.title},
+            #{Announcement.content},
+            #{Announcement.type},
+            #{Announcement.target_role},
+            #{Announcement.created_at}
+        )
+    </insert>
+
+    <update id="Update">
+        update table Announcement
+        SET title = #{Announcement.title},
+            content = #{Announcement.content},
+            type = #{Announcement.type},
+            target_role = #{Announcement.target_role},
+            created_at = #{Announcement.created_at},
+        where id = #{id}
+    </update>
+
+    <delete id="DeleteById">
+        DELETE from Announcement where id = #{id}
+    </delete>
+
+    <delete id="DeleteByIdbatch">
+        DELETE FROM Announcement
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="SelectAll" resultType="org.hae.yl.entity.Announcement" resultMap="AnnouncementResultMap">
+        SELECT * FROM Announcement
+        WHERE target_role = 'all' OR target_role = 'user'
+    </select>
+
+    <select id="SelectById" resultType="org.hae.yl.entity.Announcement" resultMap="AnnouncementResultMap">
+        select * from Announcement where id = #{id}
+    </select>
+
+    <select id="SelectByLike" resultType="org.hae.yl.entity.Announcement" resultMap="AnnouncementResultMap">
+        SELECT * FROM nursing_home
+        WHERE title LIKE CONCAT('%', #{like}, '%')
+    </select>
+
+</mapper>

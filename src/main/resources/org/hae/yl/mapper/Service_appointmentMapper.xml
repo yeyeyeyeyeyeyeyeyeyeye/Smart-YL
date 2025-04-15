@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.hae.yl.mapper.Service_appointmentMapper">
+
+    <resultMap id="Service_appointmentResultMap" type="org.hae.yl.entity.Service_appointment">
+        <result column="id" property="id"></result>
+        <result column="user_id" property="user_id"></result>
+        <result column="service_id" property="service_id"></result>
+        <result column="appointment_time" property="appointment_time"></result>
+        <result column="status" property="status"></result>
+        <result column="note" property="note"></result>
+    </resultMap>
+
+
+    <insert id="Insert">
+        INSERT INTO Service_appointment(
+            user_id ,
+            service_id ,
+            appointment_time ,
+            statusn,
+            note
+        ) values (
+            #{Service_appointment.user_id},
+            #{Service_appointment.service_id},
+            #{Service_appointment.appointment_time},
+            #{Service_appointment.status},
+            #{Service_appointment.note}
+        )
+    </insert>
+
+    <update id="Update">
+        update table Service_appointment
+        SET user_id = #{Service_appointment.user_id},
+            service_id = #{Service_appointment.service_id},
+            appointment_time = #{Service_appointment.appointment_time},
+            status = #{Service_appointment.status},
+            note = #{Service_appointment.note}
+        where id = #{id}
+    </update>
+
+    <delete id="DeleteById">
+        DELETE from Service_appointment where id = #{id}
+    </delete>
+
+    <delete id="DeleteByIdbatch">
+        DELETE FROM Service_appointment
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="SelectAll" resultType="org.hae.yl.entity.Service_appointment" resultMap="Service_appointmentResultMap">
+        select * from Service_appointment
+    </select>
+
+    <select id="SelectById" resultType="org.hae.yl.entity.Service_appointment" resultMap="Service_appointmentResultMap">
+        select * from Service_appointment where id = #{id}
+    </select>
+
+    <select id="AppointmentRecord" resultType="org.hae.yl.entity.Service_appointment">
+        SELECT * FROM Service_appointment Where user_id = #{userId} AND status = #{ServiceStatus}
+    </select>
+
+    <select id="GetpH" resultType="org.hae.yl.entity.Service_appointment">
+        SELECT
+            si.id AS service_id,
+            si.name AS service_name,
+            COUNT(sa.id) AS appointment_count
+        FROM
+            service_item si
+                LEFT JOIN
+            service_appointment sa ON si.id = sa.service_id
+        GROUP BY
+            si.id, si.name
+        ORDER BY
+            appointment_count DESC
+    </select>
+</mapper>

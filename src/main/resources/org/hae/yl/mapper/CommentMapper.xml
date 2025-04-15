@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.hae.yl.mapper.CommentMapper">
+
+    <resultMap id="ContentResultMap" type="org.hae.yl.entity.Comment">
+        <result column="id" property="id"></result>
+        <result column="discussion_id" property="discussion_id"></result>
+        <result column="user_id" property="user_id"></result>
+        <result column="content" property="content"></result>
+        <result column="parent_id" property="parent_id"></result>
+        <result column="created_at" property="created_at"></result>
+        <result column="updated_at" property="updated_at"></result>
+    </resultMap>
+
+    <insert id="Insert">
+        INSERT INTO comment(
+            discussion_id,
+            user_id,
+            content,
+            parent_id,
+            created_at,
+            updated_at
+        ) values (
+            #{discussion_id},
+            #{user_id},
+            #{content},
+            #{parent_id},
+            #{created_at},
+            #{updated_at}
+        )
+    </insert>
+
+    <update id="Update">
+        update table comment
+        SET discussion_id = #{comment.discussion_id},
+            user_id = #{comment.user_id},
+            content = #{comment.content},
+            parent_id = #{comment.parent_id},
+            created_at = #{comment.created_at},
+            updated_at = #{comment.updated_at}
+        where id = #{id}
+    </update>
+
+    <delete id="DeleteById">
+        DELETE from comment where id = #{id}
+    </delete>
+
+    <delete id="DeleteByIdbatch">
+        DELETE FROM comment
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="SelectAll" resultType="org.hae.yl.entity.Comment">
+        SELECT * FROM comment
+    </select>
+
+    <select id="SelectByTheme" resultType="org.hae.yl.entity.Comment">
+        SELECT * FROM comment WHERE discussion_id = #{id}
+    </select>
+
+    <select id="SelectByThemeReturnIds" resultType="java.lang.Integer">
+        SELECT id FROM comment WHERE discussion_id = #{id}
+    </select>
+
+
+    <!--    <select id="selectBlog" resultType="org.hae.yl.entity.Activity">-->
+    <!--        select * from Blog where id = #{id}-->
+    <!--    </select>-->
+</mapper>

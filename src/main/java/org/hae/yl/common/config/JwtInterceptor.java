@@ -10,8 +10,8 @@ import org.hae.yl.common.Enums.ResultCodeEnum;
 import org.hae.yl.entity.User;
 import org.hae.yl.entity.Role;
 import org.hae.yl.exception.CustomException;
-import org.hae.yl.service.RoleService;
-import org.hae.yl.service.UserService;
+import org.hae.yl.facade.RoleFacade;
+import org.hae.yl.facade.UserFacade;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -20,8 +20,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 public class JwtInterceptor implements HandlerInterceptor {
@@ -29,10 +27,11 @@ public class JwtInterceptor implements HandlerInterceptor {
     private static final Logger log = LoggerFactory.getLogger(JwtInterceptor.class);        //创建一个 日志记录器
 
     @Resource
-    private UserService userService;
+    private RoleFacade roleFacade;
 
     @Resource
-    private RoleService roleService;
+    private UserFacade userfacade;
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -40,43 +39,24 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         String requestURI = request.getRequestURI();       // 正确获取 URI
         System.out.println("Request URI: " + requestURI);  // 打印请求路径，用于调试
+        String token = request.getHeader(Constants.TOKEN); //从请求头获取 token
 
-        // 登录和注册接口不需要拦截
-        List<String> excludedPaths = Arrays.asList("/", "/login/**", "/verify");
-        if (excludedPaths.contains(requestURI)) {
-            return true;
-        }
-
-        String token = request.getHeader(Constants.TOKEN);      // 1. 从http请求的header中获取token
-        System.out.println("Token from Header: " + token);      // 打印获取到的 token 值
-
-        if (ObjectUtil.isEmpty(token)) {
-            // 如果没拿到，从参数里再拿一次
-            token = request.getParameter(Constants.TOKEN);
-        }
-
-        // 2. 开始执行认证
-        if (ObjectUtil.isEmpty(token)) {
-            throw new CustomException(ResultCodeEnum.TOKEN_INVALID_ERROR);
-        }
-        User user = null;
-
+        User user = userfacade.getUserInfo(request,token);   // 获取用户信息
         try{
-            String userRole = JWT.decode(token).getAudience().get(0);
-            String userId = userRole.split("-")[0];
-            String role = userRole.split("-")[1];
 
-            System.out.println("解密后的 :" +userRole);
-            System.out.println("Id :"+userId);
-            System.out.println("role :"+role);
-
-            // 通过 userId 查找用户
-            user = (User) userService.SelectById(Integer.parseInt(userId));
-            System.out.println("用户数据预览  :" + user.toString());
-
-            // 如果用户存在，查询用户的角色
-            if (user != null){
-                Role roleEntity  = roleService.SelectById(user.getRole_id()); // 根据 user 表的 role_id 查询 Role 表
+            String role = "";
+            switch (user.getRole_id()) {
+                case 1: role = "user";
+                    break;
+                case 2: role = "comadmin";
+                    break;
+                case 3: role = "sysadmin";
+                    break;
+                case 4: role = "staff";
+                    break;
+            }
+            if (user != null){// 如果用户存在，查询用户的角色
+                Role roleEntity  = roleFacade.SelectById(user.getRole_id()); // 根据 user 表的 role_id 查询 Role 表 进行配对
                 if (roleEntity  != null && !roleEntity.getName().equals(role)){
                     throw new CustomException(ResultCodeEnum.TOKEN_CHECK_ERROR);
                 }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.hae.yl.mapper.Message_boardMapper">
+
+    <resultMap id="Message_boardResultMap" type="org.hae.yl.entity.Message_board">
+        <result column="id" property="id"></result>
+        <result column="user_id" property="user_id"></result>
+        <result column="content" property="content"></result>
+        <result column="created_at" property="created_at"></result>
+        <result column="reply" property="reply"></result>
+    </resultMap>
+
+    <insert id="Insert">
+        INSERT INTO Message_board(
+            user_id,
+            content,
+            created_at,
+            reply
+        ) values (
+            #{Message_board.user_id},
+            #{Message_board.content},
+            #{Message_board.created_at},
+            #{Message_board.reply}
+        )
+    </insert>
+
+    <update id="Update">
+        update table Message_board
+        SET user_id = #{Message_board.user_id},
+            content = #{Message_board.content},
+            created_at = #{Message_board.created_at},
+            reply = #{Message_board.reply}
+        where id = #{id}
+    </update>
+
+    <delete id="DeleteById">
+        DELETE from Message_board where id = #{id}
+    </delete>
+
+    <delete id="DeleteByIdbatch">
+        DELETE FROM Message_board
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="SelectAll" resultType="org.hae.yl.entity.Message_board" resultMap="Message_boardResultMap">
+        select * from Message_board
+    </select>
+
+    <select id="SelectById" resultType="org.hae.yl.entity.Message_board" resultMap="Message_boardResultMap">
+        select * from Message_board where id = #{id}
+    </select>
+
+    <select id="SelectByLike" resultType="org.hae.yl.entity.Message_board" resultMap="Message_boardResultMap">
+        SELECT * FROM nursing_home
+        WHERE content LIKE CONCAT('%', #{like}, '%')
+           OR reply LIKE CONCAT('%', #{like}, '%')
+    </select>
+
+</mapper>

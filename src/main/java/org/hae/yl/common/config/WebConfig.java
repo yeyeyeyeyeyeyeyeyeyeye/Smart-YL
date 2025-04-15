@@ -19,7 +19,12 @@ public class WebConfig implements WebMvcConfigurer {
         // 添加拦截器，并指定拦截路径
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/**")     // 拦截所有路径
-                .excludePathPatterns("/", "/login/**", "/verify/**")  // 排除所有 /login 下的路径
+                .excludePathPatterns(
+                        "/publicapi/**", // 排除所有 /publicapi/ 开头的接口
+                        "/api/**",
+                        "/error",        // Spring 默认错误页面
+                        "/favicon.ico"   // 防止浏览器请求图标被拦截
+                )
                 .order(0);
     }
 

@@ -1,16 +1,14 @@
-package org.hae.yl.controller;
+package org.hae.yl.controller.PublicAPI;
 
 import org.hae.yl.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 import static org.hae.yl.Util.JwtUtil.validateToken;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/verify")
+@RequestMapping("/publicapi/verify")
 public class VerifyController {
 
     @Autowired

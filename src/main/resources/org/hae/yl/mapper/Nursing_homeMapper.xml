@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.hae.yl.mapper.Nursing_homeMapper">
+
+    <resultMap id="Nursing_homeResultMap" type="org.hae.yl.entity.Nursing_home">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <result column="address" property="address"></result>
+        <result column="phone" property="phone"></result>
+        <result column="description" property="description"></result>
+        <result column="longitude" property="longitude"></result>
+        <result column="latitude" property="latitude"></result>
+        <result column="level" property="level"></result>
+        <result column="created_at" property="created_at"></result>
+    </resultMap>
+
+    <insert id="Insert">
+        INSERT INTO Nursing_home(
+            name       ,
+            address    ,
+            phone      ,
+            description,
+            longitude  ,
+            latitude   ,
+            level      ,
+            created_at
+        ) values (
+             #{nursing_home.name},
+             #{nursing_home.address},
+             #{nursing_home.phone},
+             #{nursing_home.description},
+             #{nursing_home.longitude},
+             #{nursing_home.latitude},
+             #{nursing_home.level},
+             #{nursing_home.created_at}
+        )
+    </insert>
+
+    <update id="Update">
+        update table Nursing_home
+        SET name = #{nursing_home.name},
+            address = #{nursing_home.address},
+            phone = #{nursing_home.phone},
+            description = #{nursing_home.description},
+            longitude = #{nursing_home.longitude},
+            latitude = #{nursing_home.latitude},
+            level = #{nursing_home.level},
+            created_at = #{nursing_home.created_at}
+        where id = #{id}
+    </update>
+    
+    <delete id="DeleteById">
+        DELETE from Nursing_home where id = #{id}
+    </delete>
+    
+    <delete id="DeleteByIdbatch">
+        DELETE FROM Nursing_home
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="SelectAll" resultType="org.hae.yl.entity.Nursing_home" resultMap="Nursing_homeResultMap">
+        select * from Nursing_home
+    </select>
+
+    <select id="SelectById" resultType="org.hae.yl.entity.Nursing_home" resultMap="Nursing_homeResultMap">
+        select * from Nursing_home where id = #{id}
+    </select>
+
+    <select id="SelectByLike" resultType="org.hae.yl.entity.Nursing_home" resultMap="Nursing_homeResultMap">
+        SELECT * FROM nursing_home
+        WHERE name LIKE CONCAT('%', #{like}, '%')
+           OR description LIKE CONCAT('%', #{like}, '%')
+    </select>
+
+    <select id="getOrgServiceList" resultType="org.hae.yl.entity.Nursing_home">
+        SELECT * FROM service_item WHERE home_id = #{home_id}
+    </select>
+
+
+
+    <!--    //机构基本信息（名称、位置、简介、等级）接口-->
+
+<!--    1 | 幸福养老院     | 北京市朝阳区幸福路123号   | 010-12345678  | 提供专业的养老服务，舒适的环境和丰富的娱乐活动 | 116.405285 | 39.904989 | 五星  | 2025-04-11 09:36:37-->
+
+<!--    2 | 安康老年公寓   | 上海市浦东新区安康路456号 | 021-23456789  | 为老年人提供贴心的护理服务，温馨的居住环境     | 121.473701 | 31.230416 | 四星  | 2025-04-11 09:36:37-->
+
+<!--    3 | 紫薇养老中心   | 广州市天河区紫薇路789号   | 020-34567890  | 现代化设施，全天候护理，关注老年人身心健康     | 113.264385 | 23.129112 | 三星  | 2025-04-11 09:36:37-->
+
+<!--    4 | 白云敬老院     | 广州市白云区敬老路101号   | 020-45678901  | 专注老年人护理，提供个性化照顾                 | 113.258414 | 23.156527 | 五星  | 2025-04-11 09:36:37-->
+
+<!--    5 | 蓝天老人之家   | 深圳市福田区蓝天路202号   | 0755-56789012 | 给老年人一个温暖的家，周到的医疗和护理服务     | 114.057868 | 22.543096 | 四星  | 2025-04-11 09:36:37-->
+
+<!--    6 | 和平养老院     | 成都市武侯区和平街303号   | 028-67890123  | 环境优美，医疗护理设备先进                     | 104.073302 | 30.577404 | 三星  | 2025-04-11 09:36:37-->
+
+<!--    7 | 长寿之家       | 杭州市西湖区长寿路404号   | 0571-78901234 | 提供尊贵的养老服务，全天候健康监测             | 120.155072 | 30.274084 | 五星  | 2025-04-11 09:36:37-->
+
+<!--    8 | 阳光养老中心   | 南京市建邺区阳光路505号   | 025-89012345  | 全天候护理，宽敞明亮的生活空间                 | 118.796077 | 32.060255 | 四星  | 2025-04-11 09:36:37-->
+
+<!--    9 | 天福老年护理院 | 武汉市江汉区天福路606号   | 027-90123456  | 专业护理，丰富的康复活动                       | 114.305537 | 30.591428 | 三星  | 2025-04-11 09:36:37-->
+
+<!--    10 | 晨曦老年公寓   | 重庆市渝中区晨曦街707号   | 023-23456789  | 提供24小时护理，舒适的居住环境                 | 106.571365 |  29.56471 | 四星  | 2025-04-11 09:36:37-->
+
+
+    <!--    <select id="selectBlog" resultType="org.hae.yl.entity.Activity">-->
+    <!--        select * from Blog where id = #{id}-->
+    <!--    </select>-->
+</mapper>

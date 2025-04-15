@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.hae.yl.mapper.Health_recordMapper">
+
+    <resultMap id="Health_recordResultMap" type="org.hae.yl.entity.Health_record">
+        <result column="id" property="id"></result>
+        <result column="user_id" property="user_id"></result>
+        <result column="date" property="date"></result>
+        <result column="blood_pressure" property="blood_pressure"></result>
+        <result column="heart_rate" property="heart_rate"></result>
+        <result column="temperature" property="temperature"></result>
+        <result column="remark" property="remark"></result>
+    </resultMap>
+
+
+    <insert id="Insert">
+        INSERT INTO Health_record(
+            user_id,
+            date,
+            blood_pressure,
+            heart_rate,
+            temperature,
+            remark
+        ) values (
+            #{Health_record.user_id},
+            #{Health_record.date},
+            #{Health_record.blood_pressure},
+            #{Health_record.heart_rate},
+            #{Health_record.temperature},
+            #{Health_record.remark}
+        )
+    </insert>
+
+    <update id="Update">
+        update table Health_record
+        SET user_id = #{Health_record.user_id},
+            date = #{Health_record.date},
+            blood_pressure = #{Health_record.blood_pressure},
+            heart_rate = #{Health_record.heart_rate},
+            temperature = #{Health_record.temperature},
+            remark = #{Health_record.remark}
+        where id = #{id}
+    </update>
+
+    <delete id="DeleteById">
+        DELETE from Health_record where id = #{id}
+    </delete>
+
+    <delete id="DeleteByIdbatch">
+        DELETE FROM Health_record
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="SelectAll" resultType="org.hae.yl.entity.Health_record" resultMap="Health_recordResultMap">
+        select * from Health_record
+    </select>
+
+    <select id="SelectById" resultType="org.hae.yl.entity.Health_record" resultMap="Health_recordResultMap">
+        select * from Health_record where id = #{id}
+    </select>
+
+    <select id="SelectByIdEndSelection" resultType="org.hae.yl.entity.Health_record">
+        SELECT * FROM health_record WHERE id = #{id} ORDER BY date ASC LIMIT 1;
+    </select>
+
+    <select id="SelectAllSignsData" resultType="org.hae.yl.entity.Health_record">
+        Select blood_pressure,heart_rate,temperature from health_record where id = #{id};
+    </select>
+
+
+</mapper>

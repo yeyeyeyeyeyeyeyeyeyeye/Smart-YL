@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.hae.yl.mapper.NewsMapper">
+
+    <resultMap id="NewsResultMap" type="org.hae.yl.entity.News">
+        <result column="id" property="id"></result>
+        <result column="title" property="title"></result>
+        <result column="content" property="content"></result>
+        <result column="published_at" property="published_at"></result>
+        <result column="source" property="source"></result>
+    </resultMap>
+
+
+    <insert id="Insert">
+        INSERT INTO News(
+            title,
+            content,
+            published_at,
+            source
+        ) values (
+            #{News.title},
+            #{News.content},
+            #{News.published_at},
+            #{News.source}
+        )
+    </insert>
+
+    <update id="Update">
+        update table News
+        SET title = #{News.title},
+            content = #{News.content},
+            published_at = #{News.published_at},
+            source = #{News.source}
+        where id = #{id}
+    </update>
+
+
+    <delete id="DeleteById">
+        DELETE from News where id = #{id}
+    </delete>
+
+    <delete id="DeleteByIdbatch">
+        DELETE FROM News
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="SelectAll" resultType="org.hae.yl.entity.News" resultMap="NewsResultMap">
+        select * from News
+    </select>
+
+    <select id="SelectById" resultType="org.hae.yl.entity.News" resultMap="NewsResultMap">
+        select * from News where id = #{id}
+    </select>
+
+    <select id="SelectByLike" resultType="org.hae.yl.entity.News" resultMap="NewsResultMap">
+        SELECT * FROM nursing_home
+        WHERE title LIKE CONCAT('%', #{like}, '%')
+           OR content LIKE CONCAT('%', #{like}, '%')
+    </select>
+</mapper>

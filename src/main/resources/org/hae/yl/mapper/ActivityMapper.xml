@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.hae.yl.mapper.ActivityMapper">
+
+    <resultMap id="ActivityResultMap" type="org.hae.yl.entity.Activity">
+        <result column="id" property="id"></result>
+        <result column="title" property="title"></result>
+        <result column="content" property="content"></result>
+        <result column="place" property="place"></result>
+        <result column="start_time" property="start_time"></result>
+        <result column="end_time" property="end_time"></result>
+        <result column="max_participants" property="max_participants"></result>
+        <result column="created_at" property="created_at"></result>
+    </resultMap>
+
+    <insert id="Insert">
+        INSERT INTO Nursing_home(
+            title ,
+            content ,
+            place ,
+            start_timen,
+            end_time ,
+            max_participants ,
+            created_at ,
+        ) values (
+            #{Activity.title},
+            #{Activity.content},
+            #{Activity.place},
+            #{Activity.start_time},
+            #{Activity.end_time},
+            #{Activity.max_participants},
+            #{Activity.created_at}
+        )
+    </insert>
+
+    <update id="Update">
+        update table Activity
+        SET title = #{Activity.title},
+            content = #{Activity.content},
+            place = #{Activity.place},
+            start_time = #{Activity.start_time},
+            end_time = #{Activity.end_time},
+            max_participants = #{Activity.max_participants},
+            created_at = #{Activity.created_at}
+        where id = #{id}
+    </update>
+
+    <delete id="DeleteById">
+        DELETE from Activity where id = #{id}
+    </delete>
+
+    <delete id="DeleteByIdbatch">
+        DELETE FROM Activity
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="SelectAll" resultType="org.hae.yl.entity.Activity" resultMap="ActivityResultMap">
+        select * from Activity
+    </select>
+
+    <select id="SelectById" resultType="org.hae.yl.entity.Activity" resultMap="ActivityResultMap">
+        select * from Activity where id = #{id}
+    </select>
+
+    <select id="SelectByLike" resultType="org.hae.yl.entity.Activity" resultMap="ActivityResultMap">
+        SELECT * FROM nursing_home
+        WHERE title LIKE CONCAT('%', #{like}, '%')
+    </select>
+
+
+
+<!--    <select id="selectBlog" resultType="org.hae.yl.entity.Activity">-->
+<!--        select * from Blog where id = #{id}-->
+<!--    </select>-->
+</mapper>

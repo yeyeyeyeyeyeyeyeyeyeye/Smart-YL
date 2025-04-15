@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.hae.yl.mapper.Login_logMapper">
+
+    <resultMap id="Login_logResultMap" type="org.hae.yl.entity.Login_log">
+        <result column="id" property="id"></result>
+        <result column="user_id" property="user_id"></result>
+        <result column="ip_address" property="ip_address"></result>
+        <result column="login_time" property="login_time"></result>
+        <result column="user_agent" property="user_agent"></result>
+    </resultMap>
+
+
+    <insert id="Insert">
+        INSERT INTO Login_log(
+            user_id,
+            ip_address,
+            login_time,
+            user_agent
+        ) values (
+            #{Login_log.user_id},
+            #{Login_log.ip_address},
+            #{Login_log.login_time},
+            #{Login_log.user_agent}
+        )
+    </insert>
+
+    <update id="Update">
+        update table Login_log
+        SET user_id = #{Login_log.user_id},
+            ip_address = #{Login_log.ip_address},
+            login_time = #{Login_log.login_time},
+            user_agent = #{Login_log.user_agent}
+        where id = #{id}
+    </update>
+
+    <delete id="DeleteById">
+        DELETE from Login_log where id = #{id}
+    </delete>
+
+    <delete id="DeleteByIdbatch">
+        DELETE FROM Login_log
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="SelectAll" resultType="org.hae.yl.entity.Nursing_home" resultMap="Login_logResultMap">
+        select * from Login_log
+    </select>
+
+    <select id="SelectUserIdLog" resultType="org.hae.yl.entity.Nursing_home" resultMap="Login_logResultMap">
+        SELECT * FROM Login_log WHERE user_id = #{userId}
+    </select>
+
+    <select id="SelectById" resultType="org.hae.yl.entity.Nursing_home" resultMap="Login_logResultMap">
+        SELECT * FROM nursing_home
+        WHERE Login_log LIKE CONCAT('%', #{like}, '%')
+    </select>
+
+
+
+</mapper>

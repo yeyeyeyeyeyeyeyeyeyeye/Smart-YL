@@ -13,7 +13,7 @@ import java.util.List;
 public class RoleServiceImpl implements RoleService {
 
     @Resource
-    RoleMapper rolemapper;
+    private RoleMapper rolemapper;
 
 
     @Override

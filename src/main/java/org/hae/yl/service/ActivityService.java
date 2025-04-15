@@ -1,12 +1,10 @@
-package org.hae.yl.mapper;
+package org.hae.yl.service;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.hae.yl.entity.Activity;
-import org.hae.yl.entity.Nursing_home;
 
 import java.util.List;
 
-public interface ActivityMapper extends BaseMapper<Activity> {
+public interface ActivityService {
 
     /**
      * 查询所有
@@ -40,5 +38,4 @@ public interface ActivityMapper extends BaseMapper<Activity> {
      *  增加
      */
     void Insert(Activity activity);
-
 }

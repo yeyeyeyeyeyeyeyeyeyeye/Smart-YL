@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.hae.yl.mapper.UserMapper">
+
+    <resultMap id="UserResultMap" type="org.hae.yl.entity.User">
+        <result column="id" property="id"></result>
+        <result column="username" property="username"></result>
+        <result column="password" property="password"></result>
+        <result column="real_name" property="real_name"></result>
+        <result column="phone" property="phone"></result>
+        <result column="avatar" property="avatar"></result>
+        <result column="role_id" property="role_id"></result>
+        <result column="status" property="status"></result>
+        <result column="created_at" property="created_at"></result>
+    </resultMap>
+
+    <insert id="Insert" >
+        INSERT INTO user(
+            username,
+            password,
+            real_name,
+            phone,
+            avatar,
+            role_id,
+            status,
+            created_at
+        )values (
+            #{user.username},
+            #{user.password},
+            #{user.real_name},
+            #{user.phone},
+            #{user.avatar},
+            #{user.role_id},
+            #{user.status},
+            #{user.created_at}
+        )
+    </insert>
+
+    <update id="Update">
+        UPDATE  user
+        SET username    = #{user.username},
+            password    = #{user.password},
+            real_name   = #{user.real_name},
+            phone   = #{user.phone},
+            avatar  = #{user.avatar},
+            role_id = #{user.role_id},
+            status  = #{user.status},
+            created_at  = #{user.created_at}
+        where id = #{user.id}
+    </update>
+
+    <delete id="Delete">
+        DELETE FROM user WHERE id = #{id}
+    </delete>
+
+    <delete id="DeleteBybatch">
+        DELETE FROM user
+        where id in
+        <foreach collection="ids" open="(" item="id" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="SelectAll" resultType="org.hae.yl.entity.User" resultMap="UserResultMap">
+        SELECT * FROM user
+    </select>
+
+    <select id="selectById" resultType="org.hae.yl.entity.User" resultMap="UserResultMap">
+        SELECT * FROM user WHERE  id = #{id}
+    </select>
+
+    <select id="selectByUsername" resultType="org.hae.yl.entity.User" resultMap="UserResultMap">
+        SELECT * FROM user
+        WHERE username = #{username}
+    </select>
+
+    <select id="Usertotal" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM user
+    </select>
+
+    <select id="Admintotal" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM user where role_id = 2 or role_id  = 3
+    </select>
+</mapper>

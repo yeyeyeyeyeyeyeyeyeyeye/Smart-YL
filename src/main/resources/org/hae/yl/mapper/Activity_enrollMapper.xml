@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.hae.yl.mapper.Activity_enrollMapper">
+
+    <resultMap id="Activity_enrollResultMap" type="org.hae.yl.entity.Activity_enroll">
+        <result column="id" property="id"></result>
+        <result column="user_id" property="user_id"></result>
+        <result column="activity_id" property="activity_id"></result>
+        <result column="enrolled_at" property="enrolled_at"></result>
+    </resultMap>
+
+    <insert id="Insert">
+        INSERT INTO Activity_enroll(
+            user_id,
+            activity_id,
+            enrolled_at
+        ) values (
+            #{Activity_enroll.id},
+            #{Activity_enroll.user_id},
+            #{Activity_enroll.activity_id},
+            #{Activity_enroll.enrolled_at}
+        )
+    </insert>
+
+    <update id="Update">
+        update table Activity_enroll
+        SET user_id = #{id},
+            activity_id = #{user_id},
+            enrolled_at = #{activity_id}
+        where id = #{id}
+    </update>
+
+    <delete id="DeleteById">
+        DELETE from Activity_enroll where id = #{id}
+    </delete>
+
+    <delete id="DeleteByIdbatch">
+        DELETE FROM Activity_enroll
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="SelectAll" resultType="org.hae.yl.entity.Activity_enroll" resultMap="Activity_enrollResultMap">
+        select * from Activity_enroll
+    </select>
+
+    <select id="MySelectAll" resultType="org.hae.yl.entity.Activity_enroll" resultMap="Activity_enrollResultMap">
+        select * from Activity_enroll WHERE user_id = #{user_id}
+    </select>
+
+    <select id="SelectById" resultType="org.hae.yl.entity.Activity_enroll" resultMap="Activity_enrollResultMap">
+        select * from Activity_enroll where id = #{id}
+    </select>
+
+</mapper>

@@ -1,32 +1,33 @@
 package org.hae.yl.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.hae.yl.entity.Activity;
+import org.hae.yl.entity.News;
 import org.hae.yl.entity.Nursing_home;
 
 import java.util.List;
 
-public interface ActivityMapper extends BaseMapper<Activity> {
+public interface NewsMapper extends BaseMapper<News> {
+
 
     /**
      * 查询所有
      */
-    List<Activity> SelectAll();
+    List<News> SelectAll();
 
     /**
      * 根据Id查询
      */
-    Activity SelectById(int id);
+    News SelectById(int id);
 
     /**
      * 模糊查询
      */
-    List<Activity> SelectByLike(String like);
+    List<News> SelectByLike(String like);
 
     /**
      *  根据 Id 修改
      */
-    void Update(int id, Activity activity);
+    void Update(int id, News nursing_home);
 
     /**
      *  根据 Id 删除
@@ -39,6 +40,5 @@ public interface ActivityMapper extends BaseMapper<Activity> {
     /**
      *  增加
      */
-    void Insert(Activity activity);
-
+    void Insert(News news);
 }

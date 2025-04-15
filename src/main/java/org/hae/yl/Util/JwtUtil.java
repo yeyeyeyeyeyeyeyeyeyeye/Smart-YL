@@ -12,15 +12,16 @@ public class JwtUtil {
     private static final long EXPIRATION = 1000 * 60 * 60 * 24; // 1天
 
     // 生成 Token
-        public static String generateToken(String username,int role) {
+        public static String generateToken(String username ,String password,int role) {
         return Jwts.builder()
             //Header 部分
                 .setSubject("admin-test")                                         //主题
-                //.setIssuedAt(new Date())                                          //设置JWT 签发时间
+                //.setIssuedAt(new Date())                                        //设置JWT 签发时间
                 .setHeaderParam("type", "JWT")                              //类型
                 .setHeaderParam("algo", "hs256")                            //加密算法
             //Payload 载荷部分
                 .claim("username", username)
+                //.claim("password", password)
                 .claim("role", role)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .setId(UUID.randomUUID().toString())                              //为生成的 JWT 设置一个随机的，唯一的 UUID 字符串（标识符）
